@@ -57,6 +57,9 @@ bool Player::update(float deltaTime, float windowWidth, float windowHeight) {
         break;
 	}
 	
+	// Update sprite position when position changes
+	sprite.setPosition(position.x, position.y);
+	
 	return shouldRestart;
 }
 
@@ -86,9 +89,6 @@ PlayerDirection Player::getDirection() const {
 }
 
 sf::Sprite Player::getShape() const {
-	sf::Sprite playerSprite = sprite;
-	playerSprite.setPosition(position.x, position.y);
-	
 	// Отладочная информация
 	static int debugCount = 0;
 	if (debugCount % 60 == 0) {
@@ -96,7 +96,7 @@ sf::Sprite Player::getShape() const {
 	}
 	debugCount++;
 	
-	return playerSprite;
+	return sprite;
 }
 
 void Player::reset(float x, float y, float initialSpeed) {
@@ -104,6 +104,7 @@ void Player::reset(float x, float y, float initialSpeed) {
 	position.y = y;
 	speed = initialSpeed;
 	direction = PlayerDirection::None;
+	sprite.setPosition(position.x, position.y);
 	updateSpriteRotation();
 }
 

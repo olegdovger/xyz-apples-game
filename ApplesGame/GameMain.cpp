@@ -1,7 +1,4 @@
-﻿// ©2023, XYZ School. All rights reserved.
-// Authored by Aleksandr Rybalka (polterageist@gmail.com)
-
-#include <iostream>
+﻿#include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Constants.h"
@@ -22,20 +19,17 @@ int main()
 	int seed = (int)time(nullptr);
 	srand(seed);
 
-	game->clearApples();
-	game->generateRandomApples();
-
-	// Debug text setup
 	sf::Font debugFont;
 	if (!debugFont.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"))
 	{
 		return EXIT_FAILURE;
 	}
 
-	sf::Text debugText = game->initDebugText(debugFont);
+	sf::Text gameStateText = game->initDebugText(debugFont);
 
-	// Инициализируем игрока после создания окна и загрузки шрифта
 	player = new Player(DEFAULT_WINDOW_WIDTH / 2.f, DEFAULT_WINDOW_HEIGHT / 2.f, INITIAL_PLAYER_SPEED, PLAYER_SIZE, *game);
+
+	game->setPlayer(player);
 
 	while (window.isOpen())
 	{
@@ -43,21 +37,31 @@ int main()
 
 		game->updateGameTick(gameClock, lastTime);
 
-        game->processWindowEvents(window);
-		game->processUserInput(*player);
+        		// Handle different game states
+		if (game->getGameState() == GameState::SelectingModes) {
+			// Show mode selection screen
+			game->processModeSelection(window);
+			game->drawModeSelectionScreen(window, debugFont);
+			window.display();
+			continue;
+		}
 
-		game->updatePlayerPosition(*player);
-		game->updateGameState(*player);
-		game->updateGameUI(debugText, *player);
+		game->processWindowEvents(window);
+		game->processUserInput();
 
-		window.clear(sf::Color(48, 48, 48)); // Grey color
+		game->updatePlayerPosition();
+		game->checkAppleCollisions();
+		game->updateAppleGameState();
+		game->updateGameState();
+		game->updateGameUI(gameStateText);
+
+		window.clear(sf::Color(48, 48, 48));
 		
 		window.draw(player->getShape());
-		game->drawApples(window, *player);
-		window.draw(debugText);
+		game->drawApples(window);
+		window.draw(gameStateText);
 
-		if (game->getGameOver()) {
-			// Экран Game Over поверх игровых объектов
+		if (game->getGameState() == GameState::GameOver) {
 			game->drawGameOverScreen(window, debugFont);
 		}
 

@@ -4,6 +4,13 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+enum class GameState {
+	SelectingModes,
+	Playing,
+	Dying,
+	GameOver
+};
+
 class Player;
 
 class Game {
@@ -18,8 +25,7 @@ private:
 	int currentApplesCount;
 	int applesEatenOnCurrentLevel;
 	bool lockGameLevel;
-	bool restartGame;
-	bool gameOver;
+	GameState gameState;
 	static const int MAX_APPLES = 20;
 	Apple* apples;
 	int applesCount;
@@ -30,13 +36,15 @@ private:
 	sf::Sound eatApplePlayer;
 	sf::Sound wallHitPlayer;
 	sf::Clock gameOverDelayClock;
-	bool gameOverPending;
+	
+	int gameModes;
+
+	Player* player;
 
 public:
 	Game();
 	~Game();
 	
-	// Getters
 	float getWindowWidth() const;
 	float getWindowHeight() const;
 	float getGameTickSeconds() const;
@@ -46,16 +54,14 @@ public:
 	int getCurrentApplesCount() const;
 	int getApplesEatenOnCurrentLevel() const;
 	bool getLockGameLevel() const;
-	bool getRestartGame() const;
-	bool getGameOver() const;
-	bool getGameOverPending() const;
+	GameState getGameState() const;
 	const Apple* getApples() const;
 	Apple& getApple(int index);
 	int getApplesCount() const;
 	const sf::Texture& getPlayerTexture() const;
 	const sf::Texture& getAppleTexture() const;
+	int getGameModes() const;
 	
-	// Setters
 	void setWindowWidth(float width);
 	void setWindowHeight(float height);
 	void setGameTickSeconds(float seconds);
@@ -65,30 +71,37 @@ public:
 	void setCurrentApplesCount(int count);
 	void setApplesEatenOnCurrentLevel(int count);
 	void setLockGameLevel(bool lock);
-	void setRestartGame(bool restart);
-	void setGameOverPending(bool pending);
+	void setGameState(GameState state);
 	void setPlayerTexture(const sf::Texture& texture);
 	void setAppleTexture(const sf::Texture& texture);
-	void setGameOver(bool over);
 	void setApplesCount(int count);
-	// Game management
+	void setGameModes(int modes);
+	void setPlayer(Player* player);
+	
+	void toggleGameMode(int mode);
+	bool hasGameMode(int mode) const;
+	void processModeSelection(sf::RenderWindow& window);
+	void drawModeSelectionScreen(sf::RenderWindow& window, const sf::Font& font) const;
+	void applySpeedBoost();
+	
 	void init();
 	void addApple(float x, float y);
 	void clearApples();
 	void generateRandomApples();
 	void drawGameOverScreen(sf::RenderWindow& window, const sf::Font& font) const;
-	void updateGameUI(sf::Text& debugText, const Player& player) const;
+	void updateGameUI(sf::Text& debugText) const;
 	
-	// Game loop methods
 	void processWindowEvents(sf::RenderWindow& window);
-	void processUserInput(Player& player);
-	void updatePlayerPosition(Player& player);
+	void processUserInput();
+	void updatePlayerPosition();
 	void updateGameTick(sf::Clock& gameClock, float& lastTime);
-	void updateGameState(Player& player);
-	void drawApples(sf::RenderWindow& window, Player& player);
+	void updateGameState();
+	void checkAppleCollisions();
+	void updateAppleGameState();
+	void drawApples(sf::RenderWindow& window);
+	void resetGameState();
 	sf::Text initDebugText(const sf::Font& font) const;
 	
-	// Sound methods
 	void playEatAppleSound();
 	void playWallHitSound();
 }; 

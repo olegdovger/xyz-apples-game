@@ -27,4 +27,9 @@ namespace Math {
 		sf::FloatRect bounds = sprite.getLocalBounds();
 		sprite.setOrigin(bounds.width * originX, bounds.height * originY);
 	}
+	
+	sf::Color applyColorAlpha(sf::Color color, unsigned char alpha) {
+		color.a = alpha;
+		return color;
+	}
 } 

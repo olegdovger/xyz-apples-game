@@ -4,3 +4,5 @@ x64
 x86
 *.user
 .cache
+compile_commands.json
+.vscode
