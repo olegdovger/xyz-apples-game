@@ -13,7 +13,6 @@ Player::Player(float x, float y, float initialSpeed, float playerSize, const Gam
 }
 
 Player::~Player() {
-	// Деструктор для очистки ресурсов
 }
 
 bool Player::update(float deltaTime, float windowWidth, float windowHeight) {
@@ -57,7 +56,6 @@ bool Player::update(float deltaTime, float windowWidth, float windowHeight) {
         break;
 	}
 	
-	// Update sprite position when position changes
 	sprite.setPosition(position.x, position.y);
 	
 	return shouldRestart;
@@ -89,7 +87,6 @@ PlayerDirection Player::getDirection() const {
 }
 
 sf::Sprite Player::getShape() const {
-	// Отладочная информация
 	static int debugCount = 0;
 	if (debugCount % 60 == 0) {
 		std::cout << "Player position: (" << position.x << ", " << position.y << "), size: " << size << std::endl;
@@ -111,23 +108,22 @@ void Player::reset(float x, float y, float initialSpeed) {
 void Player::updateSpriteRotation() {
 	switch (direction) {
 	case PlayerDirection::Right:
-		sprite.setRotation(0.f); // По умолчанию смотрит направо
-		sprite.setScale(abs(sprite.getScale().x), abs(sprite.getScale().y)); // Нормальный масштаб
+		sprite.setRotation(0.f);
+		sprite.setScale(abs(sprite.getScale().x), abs(sprite.getScale().y));
 		break;
 	case PlayerDirection::Left:
-		sprite.setRotation(0.f); // Оставляем поворот как есть
-		sprite.setScale(-abs(sprite.getScale().x), abs(sprite.getScale().y)); // Инвертируем по горизонтали
+		sprite.setRotation(0.f);
+		sprite.setScale(-abs(sprite.getScale().x), abs(sprite.getScale().y));
 		break;
 	case PlayerDirection::Up:
-		sprite.setRotation(-90.f); // Поворот на -90 градусов
-		sprite.setScale(abs(sprite.getScale().x), abs(sprite.getScale().y)); // Нормальный масштаб
+		sprite.setRotation(-90.f);
+		sprite.setScale(abs(sprite.getScale().x), abs(sprite.getScale().y));
 		break;
 	case PlayerDirection::Down:
-		sprite.setRotation(90.f); // Поворот на 90 градусов
-		sprite.setScale(abs(sprite.getScale().x), abs(sprite.getScale().y)); // Нормальный масштаб
+		sprite.setRotation(90.f);
+		sprite.setScale(abs(sprite.getScale().x), abs(sprite.getScale().y));
 		break;
 	case PlayerDirection::None:
-		// Оставляем текущий поворот и масштаб
 		sprite.setRotation(0.f);
 		sprite.setScale(abs(sprite.getScale().x), abs(sprite.getScale().y));
 		break;

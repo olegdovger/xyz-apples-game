@@ -37,9 +37,7 @@ int main()
 
 		game->updateGameTick(gameClock, lastTime);
 
-        		// Handle different game states
 		if (game->getGameState() == GameState::SelectingModes) {
-			// Show mode selection screen
 			game->processModeSelection(window);
 			game->drawModeSelectionScreen(window, debugFont);
 			window.display();
