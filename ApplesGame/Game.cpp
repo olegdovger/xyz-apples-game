@@ -10,7 +10,7 @@
 Game::Game() {
 	std::cout << "Game constructor started" << std::endl;
 	apples = new Apple[MAX_APPLES];
-	player = nullptr; // Initialize player pointer to null
+	player = nullptr;
 	init();
 	std::cout << "Game constructor finished" << std::endl;
 }
@@ -98,7 +98,6 @@ void Game::generateRandomApples() {
 		addApple(x, y);
 	}
 	
-	// Set current level target to the number of apples we wanted to generate
 	setCurrentApplesCount(numApples);
 }
 
@@ -144,7 +143,7 @@ void Game::drawGameOverScreen(sf::RenderWindow& window, const sf::Font& font) co
 	gameOverText.setFont(font);
 	gameOverText.setString("GAME OVER");
 	gameOverText.setCharacterSize(80);
-	gameOverText.setFillColor(Math::applyColorAlpha(sf::Color::Red, 220)); // Red with 86% opacity
+	gameOverText.setFillColor(Math::applyColorAlpha(sf::Color::Red, 220));
 	gameOverText.setStyle(sf::Text::Bold);
 	
 	sf::FloatRect textRect = gameOverText.getLocalBounds();
@@ -162,7 +161,7 @@ void Game::drawGameOverScreen(sf::RenderWindow& window, const sf::Font& font) co
 	
 	statsText.setString(statsStream.str());
 	statsText.setCharacterSize(28);
-	statsText.setFillColor(Math::applyColorAlpha(sf::Color::White, 200)); // White with 78% opacity
+	statsText.setFillColor(Math::applyColorAlpha(sf::Color::White, 200));
 	
 	sf::FloatRect statsRect = statsText.getLocalBounds();
 	statsText.setOrigin(statsRect.left + statsRect.width / 2.0f, statsRect.top + statsRect.height / 2.0f);
@@ -209,7 +208,6 @@ void Game::processWindowEvents(sf::RenderWindow& window) {
 void Game::processUserInput() {
 	if (getGameState() == GameState::GameOver) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-			// Return to mode selection
 			setGameState(GameState::SelectingModes);
 			resetGameState();
 			
@@ -218,7 +216,6 @@ void Game::processUserInput() {
 	}
 	
 	if (getGameState() == GameState::SelectingModes) {
-		// Mode selection is handled in processModeSelection, not here
 		return;
 	}
 
@@ -288,18 +285,14 @@ void Game::checkAppleCollisions() {
 }
 
 void Game::updateAppleGameState() {
-	// Check if level is completed (all apples eaten)
 	if (getApplesEatenOnCurrentLevel() >= getCurrentApplesCount() && getLockGameLevel() == false) {
-		// Level completed - move to next level
 		setGameLevel(getGameLevel() + 1);
 		setLockGameLevel(true);
 		
-		// Generate new apples for next level
 		clearApples();
 		generateRandomApples();
 	}
 
-	// Unlock level when new apples are generated
 	if (getApplesEatenOnCurrentLevel() < getCurrentApplesCount() && getLockGameLevel() == true) {
 		setLockGameLevel(false);
 	}
@@ -332,7 +325,7 @@ sf::Text Game::initDebugText(const sf::Font& font) const {
 	sf::Text debugText;
 	debugText.setFont(font);
 	debugText.setCharacterSize(16);
-	debugText.setFillColor(Math::applyColorAlpha(sf::Color::White, 180)); // White with 70% opacity
+	debugText.setFillColor(Math::applyColorAlpha(sf::Color::White, 180));
 	debugText.setPosition(15, 15);
 	return debugText;
 }
@@ -393,7 +386,6 @@ void Game::processModeSelection(sf::RenderWindow& window) {
 					toggleGameMode(MODE_NO_SPEED_BOOST);
 					break;
 				case sf::Keyboard::Enter:
-					// Если не выбран ни один режим, устанавливаем режим по умолчанию
 					if (gameModes == 0) {
 						gameModes = MODE_FINITE_APPLES | MODE_SPEED_BOOST;
 					}
@@ -412,11 +404,10 @@ void Game::drawModeSelectionScreen(sf::RenderWindow& window, const sf::Font& fon
 	titleText.setFont(font);
 	titleText.setString("Select Game Mode");
 	titleText.setCharacterSize(36);
-	titleText.setFillColor(Math::applyColorAlpha(sf::Color::White, 200)); // White with 78% opacity
+	titleText.setFillColor(Math::applyColorAlpha(sf::Color::White, 200));
 	titleText.setPosition(200, 50);
 	window.draw(titleText);
 	
-	// Game mode options
 	std::vector<std::string> options = {
 		"1 - Fixed amount of apples (20)",
 		"2 - Random amount of apples", 
@@ -437,12 +428,12 @@ void Game::drawModeSelectionScreen(sf::RenderWindow& window, const sf::Font& fon
 		
 		if (i < modes.size()) {
 			if (hasGameMode(modes[i])) {
-				optionText.setFillColor(Math::applyColorAlpha(sf::Color::Green, 200)); // Green with 78% opacity
+				optionText.setFillColor(Math::applyColorAlpha(sf::Color::Green, 200));
 			} else {
-				optionText.setFillColor(Math::applyColorAlpha(sf::Color::White, 180)); // White with 70% opacity
+				optionText.setFillColor(Math::applyColorAlpha(sf::Color::White, 180));
 			}
 		} else {
-			optionText.setFillColor(Math::applyColorAlpha(sf::Color::Yellow, 200)); // Yellow with 78% opacity
+			optionText.setFillColor(Math::applyColorAlpha(sf::Color::Yellow, 200));
 		}
 		
 		window.draw(optionText);
@@ -462,7 +453,7 @@ void Game::drawModeSelectionScreen(sf::RenderWindow& window, const sf::Font& fon
 	modesText.setFont(font);
 	modesText.setString(modesString);
 	modesText.setCharacterSize(18);
-	modesText.setFillColor(Math::applyColorAlpha(sf::Color::Yellow, 180)); // Yellow with 70% opacity
+	modesText.setFillColor(Math::applyColorAlpha(sf::Color::Yellow, 180));
 	modesText.setPosition(200, 380);
 	window.draw(modesText);
 }

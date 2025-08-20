@@ -3,9 +3,7 @@
 #include "Game.h"
 #include "Math.h"
 	
-Apple::Apple() : x(0), y(0), isEaten(false) {
-	// Пустой конструктор для создания массива
-}
+Apple::Apple() : x(0), y(0), isEaten(false) {}
 
 Apple::Apple(float posX, float posY, const Game& game) : x(posX), y(posY), isEaten(false) {
 	sprite.setTexture(game.getAppleTexture());
@@ -14,11 +12,7 @@ Apple::Apple(float posX, float posY, const Game& game) : x(posX), y(posY), isEat
 	sprite.setPosition(x, y);
 }
 
-Apple::~Apple() {
-	// Деструктор для очистки ресурсов
-}
-
-
+Apple::~Apple() {}
 
 void Apple::setEaten(bool eaten) {
 	isEaten = eaten;
