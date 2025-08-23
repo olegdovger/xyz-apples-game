@@ -11,4 +11,17 @@ namespace Math {
 	void setSpriteRelativeOrigin(sf::Sprite& sprite, float originX, float originY);
 	
 	sf::Color applyColorAlpha(sf::Color color, unsigned char alpha);
+
+	template<typename T>
+	void insertionSortDescending(std::vector<T>& arr, bool (*compare)(const T&, const T&)) {
+		for (int i = 1; i < (int)arr.size(); ++i) {
+			T key = arr[i];
+			int j = i - 1;
+			while (j >= 0 && compare(arr[j], key)) {
+				arr[j + 1] = arr[j];
+				j--;
+			}
+			arr[j + 1] = key;
+		}
+	}
 } 

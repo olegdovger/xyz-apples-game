@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Apple.h"
+#include "Leaderboard.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
@@ -38,6 +39,7 @@ private:
 	sf::Clock gameOverDelayClock;
 	
 	int gameModes;
+	Leaderboard leaderboard;
 
 	Player* player;
 

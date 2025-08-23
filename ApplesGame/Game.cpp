@@ -139,34 +139,8 @@ void Game::drawGameOverScreen(sf::RenderWindow& window, const sf::Font& font) co
 	overlay.setFillColor(sf::Color(0, 0, 0, 180));
 	window.draw(overlay);
 
-	sf::Text gameOverText;
-	gameOverText.setFont(font);
-	gameOverText.setString("GAME OVER");
-	gameOverText.setCharacterSize(80);
-	gameOverText.setFillColor(Math::applyColorAlpha(sf::Color::Red, 220));
-	gameOverText.setStyle(sf::Text::Bold);
-	
-	sf::FloatRect textRect = gameOverText.getLocalBounds();
-	gameOverText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	gameOverText.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f - 120);
-	window.draw(gameOverText);
-
-	sf::Text statsText;
-	statsText.setFont(font);
-	std::stringstream statsStream;
-	statsStream << "Final Score: " << numEatenApples << " apples\n";
-	statsStream << "Final Level: " << gameLevel << "\n";
-	statsStream << "Final Speed: " << std::fixed << std::setprecision(1) << playerSpeed << "\n\n";
-	statsStream << "Press ESC to return to mode selection";
-	
-	statsText.setString(statsStream.str());
-	statsText.setCharacterSize(28);
-	statsText.setFillColor(Math::applyColorAlpha(sf::Color::White, 200));
-	
-	sf::FloatRect statsRect = statsText.getLocalBounds();
-	statsText.setOrigin(statsRect.left + statsRect.width / 2.0f, statsRect.top + statsRect.height / 2.0f);
-	statsText.setPosition(window.getSize().x / 2.0f, window.getSize().y / 2.0f + 60);
-	window.draw(statsText);
+	// Draw the leaderboard instead of the old game over screen
+	leaderboard.draw(window, font, "Player", numEatenApples);
 }
 
 void Game::updateGameUI(sf::Text& gameStateText) const {
