@@ -10,61 +10,29 @@ Leaderboard::Leaderboard() {
 }
 
 void Leaderboard::addScore(const std::string& name, int score) {
-    bool found = false;
-    for (int i = 0; i < records.size(); i++) {
-        if (records[i].name == name) {
-            records[i].score = score;
-            found = true;
-            break;
-        }
-    }
-    
-    if (!found) {
-        LeaderboardRecord newRecord(name, score);
-        records.push_back(newRecord);
-    }
-    
-    Math::insertionSortDescending(records, compareLeaderboardRecords);
-    
-    if (records.size() > MAX_RECORDS) {
-        records.resize(MAX_RECORDS);
-    }
+    records[name] = score;
 }
 
 void Leaderboard::generateFakeRecords() {
-    std::vector<LeaderboardRecord> initialRecords = {
-        LeaderboardRecord("Alice", 54),
-        LeaderboardRecord("Bob", 43),
-        LeaderboardRecord("Carol", 32),
-        LeaderboardRecord("Dave", 21),
-        LeaderboardRecord("Player", 0)
-    };
-    records = initialRecords;
+    records.clear();
+    records["Alice"] = 54;
+    records["Bob"] = 43;
+    records["Carol"] = 32;
+    records["Dave"] = 21;
+    records["Player"] = 0;
 }
 
-const std::vector<LeaderboardRecord>& Leaderboard::getRecords() const {
+const std::unordered_map<std::string, int>& Leaderboard::getRecords() const {
     return records;
 }
 
-int Leaderboard::getPlayerRank(const std::string& playerName) const {
-    for (int i = 0; i < records.size(); i++) {
-        if (records[i].name == playerName) {
-            return i + 1;
-        }
-    }
-    return -1;
-}
-
 void Leaderboard::draw(sf::RenderWindow& window, const sf::Font& font, const std::string& playerName, int playerScore) const {
-    std::vector<LeaderboardRecord> displayRecords = records;
-    LeaderboardRecord currentPlayer(playerName, playerScore);
-    displayRecords.push_back(currentPlayer);
+    std::unordered_map<std::string, int> displayMap = records;
+    displayMap[playerName] = playerScore;
     
-    Math::insertionSortDescending(displayRecords, compareLeaderboardRecords);
+    std::vector<LeaderboardRecord> displayRecords;
     
-    if (displayRecords.size() > MAX_RECORDS) {
-        displayRecords.resize(MAX_RECORDS);
-    }
+    Math::insertionSortDescending(displayMap, displayRecords, compareLeaderboardRecords);
     
     sf::Text titleText;
     titleText.setFont(font);

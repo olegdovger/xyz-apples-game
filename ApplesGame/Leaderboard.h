@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <vector>
+#include <unordered_map>
 #include <string>
 
 struct LeaderboardRecord {
@@ -17,7 +17,7 @@ bool compareLeaderboardRecords(const LeaderboardRecord& a, const LeaderboardReco
 
 class Leaderboard {
 private:
-    std::vector<LeaderboardRecord> records;
+    std::unordered_map<std::string, int> records;
     static const int MAX_RECORDS = 5;
     
 public:
@@ -25,7 +25,6 @@ public:
     
     void addScore(const std::string& name, int score);
     void generateFakeRecords();
-    const std::vector<LeaderboardRecord>& getRecords() const;
-    int getPlayerRank(const std::string& playerName) const;
+    const std::unordered_map<std::string, int>& getRecords() const;
     void draw(sf::RenderWindow& window, const sf::Font& font, const std::string& playerName, int playerScore) const;
 };
